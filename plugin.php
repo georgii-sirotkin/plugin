@@ -21,4 +21,24 @@ function displayPriceInUSD() {
     echo '</div>';
 }
 
+function displayExchangeRates() {
+    $rates = getExchangeRates();
+    $displayedCurrencyCodes = ['USD', 'EUR', 'RUB'];
+    echo '<h5>Exchange rates</h5>';
+    echo '<table class="table table-striped" style="max-width: 772px">';
+	$currencyCodes = array_filter(array_keys($rates), function ($code) use ($displayedCurrencyCodes) {
+	    return in_array($code, $displayedCurrencyCodes);
+    });
+
+	foreach ($currencyCodes as $code) {
+	    echo '<tr>';
+	    echo "<th>{$code}</th>";
+	    echo "<td>{$rates[$code]}</td>";
+	    echo '</tr>';
+    }
+
+    echo '</table>';
+}
+
 add_action('auto_listings_single_content', 'displayPriceInUSD');
+add_action('auto_listings_single_lower_full_width', 'displayExchangeRates');
